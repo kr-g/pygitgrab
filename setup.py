@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pygitgrab", 
-    version="v0.0.6",
+    version="v0.0.7",
     author="k.r. goger",
     author_email="k.r.goger+pygitgrab@gmail.com",
     description="grab only certain information from remote git repo and store them local",
@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     license = 'MIT',
     keywords = 'python utility shell, git',
-    install_requires=[ ],    
+    install_requires=[ "requests" ],    
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Operating System :: POSIX :: Linux',
