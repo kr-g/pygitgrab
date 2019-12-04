@@ -119,7 +119,8 @@ def gitgrab( login, simulate ):
 def main():
     
     import argparse
-    parser = argparse.ArgumentParser(description='grab files from remote git repo. for pygg.cfg file format refer to https://github.com/kr-g/pygitgrab')
+    parser = argparse.ArgumentParser(prog='pygitgrab', usage='%(prog)s [options]',
+        description='grab files from remote git repo. for pygg.cfg file format refer to https://github.com/kr-g/pygitgrab')
     parser.add_argument("-v", "--version", dest='show_version', action="store_true",
                         help="show version info and exit", default=False )
     parser.add_argument("-L", "--license", dest='show_license', action="store_true",
