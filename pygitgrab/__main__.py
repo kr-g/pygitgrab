@@ -10,7 +10,7 @@ from .extract import extract
 from .readuserinfo import get_credits
 
 
-VERSION = "v0.0.7"
+VERSION = "v0.0.8"
 
 
 def get_owner_repo( githuburl ):
