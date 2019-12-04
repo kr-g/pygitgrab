@@ -37,7 +37,7 @@ the structure is as following:
     # pull_alias is just a name for the pull task
     pull_alias="*.py", "new_folder"
     # sample for pulling a license and store them at a different place
-    license="LICENSE.md", "license/a_license.MD"
+    license="LICENSE.md", "LICENSE/a_license.MD"
     
 
 `pygitgrab` will create the directory structure as found in the remote git repo when pattern matching is used.
