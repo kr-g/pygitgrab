@@ -49,7 +49,7 @@ general information regarding the syntax can be found there.
 
     python3 -m pygitgrab -h 
 
-    usage: __main__.py [-h] [-v] [-L] [-s] [-u [USER]]
+    usage: pygitgrab [-h] [-v] [-L] [-s] [-u [USER]]
 
     grab files from remote git repo. for pygg.cfg file format refer to
     https://github.com/kr-g/pygitgrab
