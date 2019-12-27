@@ -74,3 +74,14 @@ when you move 3rd party license information into the special folder 'LICENSE' th
 
 works only with github as backend.
 
+
+# deprecation of user and password authentication 
+
+github recently [announced](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api/) to discontinue user/password authentication soon.
+
+use a [personal access token](https://developer.github.com/v3/auth/#basic-authentication) instead of a password.
+
+create your personal access token under [GitHub developer settings](https://github.com/settings/tokens) as described in the help for [creating a personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
+
+the minimum required scope(s) of the token is `public_repo`
+
