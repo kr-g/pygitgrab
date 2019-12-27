@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pygitgrab", 
-    version="v0.0.7",
+    version="v0.0.11",
     author="k.r. goger",
     author_email="k.r.goger+pygitgrab@gmail.com",
     description="grab only certain information from remote git repo and store them local",

@@ -10,7 +10,7 @@ from .extract import extract
 from .readuserinfo import get_credits
 
 
-VERSION = "v0.0.8"
+VERSION = "v0.0.11"
 
 
 def get_owner_repo( githuburl ):
@@ -128,9 +128,11 @@ def main():
     parser.add_argument("-s", "--simulate", dest='simulate', action="store_true",
                         help="dry run, do not download files", default=False )
     parser.add_argument("-u", "--user", dest='user', action="store", nargs="?",
-                        help="authenticate with user, no user for prompt. "+
-                        "unauthenticated users have a lower rate for downloading from github "+
-                        "https://developer.github.com/v3/rate_limit/", default="" )
+                        help="authenticate with user, no user for prompt. "
+                        + "create a personal access token in your github settings instead of using a password. "
+                        + "unauthenticated users have a lower rate for downloading from github. "
+                        + "https://developer.github.com/v3/rate_limit/ \n"
+                        , default="" )
 
     args = parser.parse_args()
     #print( args )
