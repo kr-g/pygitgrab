@@ -1,0 +1,12 @@
+[MicroWebSrv2]
+url='https://github.com/jczic/MicroWebSrv2'
+src="MicroWebSrv2/*.py"
+##src2="MicroWebSrv2/*.py", "../etc"
+##src3="MicroWebSrv2/*.py", "../"
+##src4="MicroWebSrv2/*.py", "/"
+license="LICENSE.md","license/MicroWebSrv2.MD"
+##docs="README.md"
+##docs2="README.md", "."
+##docs3="README.md", ".."
+
+

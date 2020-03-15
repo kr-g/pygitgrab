@@ -10,7 +10,7 @@ from .extract import extract
 from .readuserinfo import get_credits
 
 
-VERSION = "v0.0.11"
+VERSION = "v0.0.15"
 
 
 def get_owner_repo( githuburl ):
@@ -61,9 +61,9 @@ def check_valid_dir(basedir):
     return True
   
 
-def gitgrab( login, simulate ):
+def gitgrab( login, simulate, cfgpath = "pygg.cfg" ):
     
-    config = read_pull_config()
+    config = read_pull_config(cfgpath)
     errors = 0
 
     for repo_alias, pulls in config.items():
@@ -113,12 +113,13 @@ def gitgrab( login, simulate ):
             if pulled == 0:
                 print( f"nothing to pull for {p}" )
 
-    print( f"done with {errors} errors" )
+    print( f"{cfgpath} done with {errors} errors" )
         
     
 def main():
     
     import argparse
+    
     parser = argparse.ArgumentParser(prog='pygitgrab', usage='%(prog)s [options]',
         description='grab files from remote git repo. for pygg.cfg file format refer to https://github.com/kr-g/pygitgrab')
     parser.add_argument("-v", "--version", dest='show_version', action="store_true",
@@ -127,6 +128,11 @@ def main():
                         help="show license info and exit", default=False )
     parser.add_argument("-s", "--simulate", dest='simulate', action="store_true",
                         help="dry run, do not download files", default=False )
+    
+    parser.add_argument("-f", "--file", dest='files', action="append", type=str,
+                        nargs=1, help="name of pygg file to read, adds as '.pygg' extension if missing",
+                        default=None, metavar='FILE')
+    
     parser.add_argument("-u", "--user", dest='user', action="store", nargs="?",
                         help="authenticate with user, no user for prompt. "
                         + "create a personal access token in your github settings instead of using a password. "
@@ -162,7 +168,13 @@ def main():
         user, passwd = get_credits(args.user)
         login=(user, passwd) 
 
-    gitgrab( login, args.simulate )
+    files = [["pygg.cfg"]] if args.files == None else args.files
+    
+    for f in files:
+        fnam = f[0]
+        if len( os.path.splitext(fnam)[1] ) == 0:
+            fnam += ".pygg" 
+        gitgrab( login, args.simulate, fnam )
 
 
 if __name__ == '__main__':

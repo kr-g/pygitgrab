@@ -1,0 +1,8 @@
+
+[mpycntrl]
+url='https://github.com/kr-g/mpycntrl'
+#tag="v0.0.2"
+license="LICENSE","license/mpycntrl.MD"
+src="mpycntrl/*.py"
+
+

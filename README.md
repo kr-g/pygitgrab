@@ -45,11 +45,15 @@ the structure is as following:
 `pygitgrab` uses python [configparser](https://docs.python.org/3/library/configparser.html).
 general information regarding the syntax can be found there.
 
+# other pygg files
+
+when calling with parameter `-f cfgfile` the configuration is read from there instead of `pygg.cfg` config file.
+if a file extension is missing an extension `.pygg` is added as default.
+
+
 # cmd line parameter
 
-    python3 -m pygitgrab -h 
-
-    usage: pygitgrab [-h] [-v] [-L] [-s] [-u [USER]]
+    usage: pygitgrab [options]
 
     grab files from remote git repo. for pygg.cfg file format refer to
     https://github.com/kr-g/pygitgrab
@@ -59,11 +63,15 @@ general information regarding the syntax can be found there.
       -v, --version         show version info and exit
       -L, --license         show license info and exit
       -s, --simulate        dry run, do not download files
+      -f FILE, --file FILE  name of pygg file to read, adds as '.pygg' extension
+                            if missing
       -u [USER], --user [USER]
-                            authenticate with user, no user for prompt.
-                            unauthenticated users have a lower rate for
-                            downloading from github
+                            authenticate with user, no user for prompt. create a
+                            personal access token in your github settings instead
+                            of using a password. unauthenticated users have a
+                            lower rate for downloading from github.
                             https://developer.github.com/v3/rate_limit/
+
 
 # 3rd party licenses
 

@@ -11,3 +11,7 @@ share/
 pyvenv.cfg
 
 **/pygg.cfg
+MicroWebSrv2/
+license/
+mpycntrl/
+

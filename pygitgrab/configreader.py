@@ -11,7 +11,7 @@ class Pull:
         return f"Pull< repo='{self.repo}' tag='{self.tag}' root='{self.root}' alias='{self.alias}' pattern='{self.pattern}' dest='{self.dest}' >"
 
 
-def read_pull_config( path="pygg.cfg" ):
+def read_pull_config( path ):
     
     config = configparser.ConfigParser()
     config.read( path )
