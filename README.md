@@ -19,6 +19,10 @@ the module is on [pypi](https://pypi.org/kr-g/pygitgrab) and can be installed wi
     
     python3 -m pygitgrab -u user_name # user_name is optional, will prompt for password
     
+    # use other .pygg files, here web.pygg, and cntrl.pygg
+    python3 -m pygitgrab -u user_name -f web -f cntrl   
+    
+    
 github offers downloading for unauthenticed users only within certain rate limits [https://developer.github.com/v3/rate_limit/](https://developer.github.com/v3/rate_limit/).
 in case downloading a bunch of serveral project files it is required to authenticate. (see also deprecation note of GitHub at the end of this document)
 
