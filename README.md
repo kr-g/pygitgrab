@@ -53,10 +53,9 @@ if a file extension is missing an extension `.pygg` is added as default.
 
 # cmd line parameter
 
-    usage: pygitgrab [options]
+    usage: python3 -m pygitgrab [options]
 
-    grab files from remote git repo. for pygg.cfg file format refer to
-    https://github.com/kr-g/pygitgrab
+    grab files from remote git repo.
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -71,6 +70,12 @@ if a file extension is missing an extension `.pygg` is added as default.
                             of using a password. unauthenticated users have a
                             lower rate for downloading from github.
                             https://developer.github.com/v3/rate_limit/
+      -c [CREDITS], --credits [CREDITS]
+                            read user and personal token from a file instead of
+                            prompting. make sure to put the file not in git
+                            controlled directory, (default: '~/pygg.credits.txt')
+
+    for more information refer to https://github.com/kr-g/pygitgrab
 
 
 # 3rd party licenses
@@ -93,3 +98,18 @@ create your personal access token under [GitHub developer settings](https://gith
 
 the minimum required scope(s) of the token is `public_repo`
 
+
+# using a credits file instead of manual authentication
+                              
+with the option `-c` or `--credits` pygitgrab reads the github user credits from a file.
+                              
+this defaults to `~/pygg.credits.txt` in the home directory if not specified.
+dont put it under a git controlled directory to prevent exposing your sensitive data.
+                              
+the file itself should have 2 lines the following structure:
+                              
+    user-name
+    user-token
+
+it can have blank lines at any place.
+                              

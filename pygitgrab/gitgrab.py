@@ -79,5 +79,24 @@ def download_file(url, dest, auth=None):
     return False
 
 
+def download_pygg(url, dest, auth=None):
+    try:        
+        headers = _getheaders(auth)
+        
+        with requests.get(url,auth=auth,headers=headers) as r:
+            
+            if r.status_code != 200:
+                raise Execption( "can not load data", url, r.headers )
+            
+            data = r.content
+            
+            return data
     
+    except Exception as ex:
+        print("error: ", ex )
+    
+    return None
+
+
+
 

@@ -4,13 +4,15 @@ import re
 
 import requests
 
-from .gitgrab import getfolders, download_file
+from .gitgrab import getfolders, download_file, download_pygg
 from .configreader import read_pull_config
 from .extract import extract
 from .readuserinfo import get_credits
 
 
-VERSION = "v0.0.15"
+VERSION = "v0.0.16"
+
+DEFAULT_CREDIT = "~/pygg.credits.txt"
 
 
 def get_owner_repo( githuburl ):
@@ -116,12 +118,14 @@ def gitgrab( login, simulate, cfgpath = "pygg.cfg" ):
     print( f"{cfgpath} done with {errors} errors" )
         
     
-def main():
+def main_func():
     
     import argparse
     
-    parser = argparse.ArgumentParser(prog='pygitgrab', usage='%(prog)s [options]',
-        description='grab files from remote git repo. for pygg.cfg file format refer to https://github.com/kr-g/pygitgrab')
+    parser = argparse.ArgumentParser(prog='pygitgrab', usage='python3 -m %(prog)s [options]',
+        description='grab files from remote git repo.',
+        epilog='for more information refer to https://github.com/kr-g/pygitgrab'
+                                     )
     parser.add_argument("-v", "--version", dest='show_version', action="store_true",
                         help="show version info and exit", default=False )
     parser.add_argument("-L", "--license", dest='show_license', action="store_true",
@@ -133,11 +137,22 @@ def main():
                         nargs=1, help="name of pygg file to read, adds as '.pygg' extension if missing",
                         default=None, metavar='FILE')
     
-    parser.add_argument("-u", "--user", dest='user', action="store", nargs="?",
+#    parser.add_argument("-url", dest='urls', action="append", type=str,
+#                        nargs=1, help="name of remote pygg file on github to read, adds as '.pygg' extension if missing",
+#                        default=None, metavar='URL')
+    
+    group = parser.add_mutually_exclusive_group()
+    
+    group.add_argument("-u", "--user", dest='user', action="store", nargs="?",
                         help="authenticate with user, no user for prompt. "
                         + "create a personal access token in your github settings instead of using a password. "
                         + "unauthenticated users have a lower rate for downloading from github. "
                         + "https://developer.github.com/v3/rate_limit/ \n"
+                        , default="" )
+
+    group.add_argument("-c", "--credits", dest='credits', action="store", nargs="?",
+                        help="read user and personal token from a file instead of prompting. "
+                        + f"make sure to put the file not in git controlled directory, (default: '{DEFAULT_CREDIT}')"
                         , default="" )
 
     args = parser.parse_args()
@@ -163,10 +178,34 @@ def main():
             pass
         return
     
+    credits = args.credits
+    if credits == None:
+        credits = DEFAULT_CREDIT
+    if credits != None and len(credits) == 0:
+        credits = None
+    
     login=None
-    if args.user == None or len(args.user)>0:
+    
+    if credits!=None:
+        credits = os.path.abspath( os.path.expanduser(credits) )
+        with open(credits) as f:
+            content = f.read().splitlines()
+            content = map( lambda x : x.strip(), content )
+            content = list(filter( lambda x : len(x)>0, content ))
+            
+        try:
+            user = content[0]
+            passwd = content[1]
+            login=(user, passwd)
+        except:
+            raise Exception("invalid credits file format")
+        
+    if login == None and ( args.user == None or len(args.user)>0 ):
         user, passwd = get_credits(args.user)
         login=(user, passwd) 
+
+    if login != None:
+        print( "downloading as user:", login[0] )
 
     files = [["pygg.cfg"]] if args.files == None else args.files
     
@@ -177,11 +216,16 @@ def main():
         gitgrab( login, args.simulate, fnam )
 
 
-if __name__ == '__main__':
+def main():
     try:
-        main()
+        main_func()
     except KeyboardInterrupt:
         pass
     except Exception as ex:
-        print( "error", ex )
+        print( "error:", ex )
 
+
+if __name__ == '__main__':
+    
+    main()
+    
