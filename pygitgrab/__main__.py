@@ -3,14 +3,15 @@ import os
 import re
 
 import requests
+import json
 
-from .gitgrab import getfolders, download_file, download_pygg
-from .configreader import read_pull_config
+from .gitgrab import getfolders, download_file
+from .configreader import read_pull_config, read_pull_config_from_str
 from .extract import extract
 from .readuserinfo import get_credits
 
 
-VERSION = "v0.0.16"
+VERSION = "v0.0.17a"
 
 DEFAULT_CREDIT = "~/pygg.credits.txt"
 
@@ -27,7 +28,7 @@ def get_owner_repo( githuburl ):
 
         return owner, repo
 
-    raise Exception(f"cant extract repo ifo, invalid github url='{githuburl}'")
+    raise Exception(f"cant extract repo info, invalid github url='{githuburl}'")
 
 
 def get_file_path(path, dest, pattern, root):
@@ -61,11 +62,39 @@ def check_valid_dir(basedir):
         return False
     
     return True
-  
 
-def gitgrab( login, simulate, cfgpath = "pygg.cfg" ):
+
+def get_remote_pygg(githuburl):
     
-    config = read_pull_config(cfgpath)
+    url = get_owner_repo(githuburl)
+    
+    regex = r"http[s]?:\/\/github\.com\/([^/]+)\/([^/]+)\/([^?:]*)([?:]ref=(.+))?"
+
+    try:
+        match = re.search(regex,githuburl)
+        
+        owner = match.group(1)
+        repo = match.group(2)
+        repo_path =  match.group(3)
+        repo_tag = match.group(5) if match.group(5) != None else "master"
+            
+        baseurl = "https://api.github.com"
+        repourl = f"{baseurl}/repos/{owner}/{repo}/contents/{repo_path}?ref={repo_tag}"
+        
+        content = download_file( repourl )
+        node = json.loads( content )
+        download_url = node["download_url"]
+        
+        file_cont = download_file( download_url ).decode()
+        
+        return file_cont
+    
+    except Exception as ex:
+        raise Exception(f"cant extract repo info, invalid github url='{githuburl}'")
+
+
+def gitgrab( login, simulate, config, cfgpath = "pygg.cfg" ):
+    
     errors = 0
 
     for repo_alias, pulls in config.items():
@@ -137,9 +166,9 @@ def main_func():
                         nargs=1, help="name of pygg file to read, adds as '.pygg' extension if missing",
                         default=None, metavar='FILE')
     
-#    parser.add_argument("-url", dest='urls', action="append", type=str,
-#                        nargs=1, help="name of remote pygg file on github to read, adds as '.pygg' extension if missing",
-#                        default=None, metavar='URL')
+    parser.add_argument("-url", dest='urls', action="append", type=str,
+                        nargs=1, help="name of remote pygg file on github to read, adds as '.pygg' extension if missing",
+                        default=None, metavar='URL')
     
     group = parser.add_mutually_exclusive_group()
     
@@ -213,8 +242,18 @@ def main_func():
         fnam = f[0]
         if len( os.path.splitext(fnam)[1] ) == 0:
             fnam += ".pygg" 
-        gitgrab( login, args.simulate, fnam )
+        config = read_pull_config(fnam)
+        gitgrab( login, args.simulate, config, cfgpath=fnam )
 
+    urls = [] if args.urls == None else args.urls
+    #print( urls )
+    
+    for url in urls:
+        url = url[0]
+        pygg = get_remote_pygg( url )
+        config = read_pull_config_from_str(pygg)
+        gitgrab( login, args.simulate, config, cfgpath=url )
+    
 
 def main():
     try:

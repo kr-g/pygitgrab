@@ -11,11 +11,7 @@ class Pull:
         return f"Pull< repo='{self.repo}' tag='{self.tag}' root='{self.root}' alias='{self.alias}' pattern='{self.pattern}' dest='{self.dest}' >"
 
 
-def read_pull_config( path ):
-    
-    config = configparser.ConfigParser()
-    config.read( path )
-
+def _complete_pull( config ):
     allpulls = {}
 
     for sec in config.sections():
@@ -58,4 +54,16 @@ def read_pull_config( path ):
             del allpulls[sec] # remove empty pull
     
     return allpulls
+
+
+def read_pull_config( path ):    
+    config = configparser.ConfigParser()
+    config.read( path )
+    return _complete_pull( config )
+
+
+def read_pull_config_from_str( conf ):    
+    config = configparser.ConfigParser()
+    config.read_string( conf )
+    return _complete_pull( config )
 

@@ -19,8 +19,14 @@ the module is on [pypi](https://pypi.org/kr-g/pygitgrab) and can be installed wi
     
     python3 -m pygitgrab -u user_name # user_name is optional, will prompt for password
     
+    # use credits file for github authentication 
+    python3 -m pygitgrab -c 
+    
     # use other .pygg files, here web.pygg, and cntrl.pygg
     python3 -m pygitgrab -u user_name -f web -f cntrl   
+    
+    # use remote .pygg files, use ref for selecting the github tag
+    python3 -m pygitgrab -u user_name -url https://github.com/kr-g/pygitgrab/cntrl.pygg?ref=master
     
     
 github offers downloading for unauthenticed users only within certain rate limits [https://developer.github.com/v3/rate_limit/](https://developer.github.com/v3/rate_limit/).
@@ -68,6 +74,8 @@ if a file extension is missing an extension `.pygg` is added as default.
       -s, --simulate        dry run, do not download files
       -f FILE, --file FILE  name of pygg file to read, adds as '.pygg' extension
                             if missing
+      -url URL              name of remote pygg file on github to read, adds as
+                            '.pygg' extension if missing
       -u [USER], --user [USER]
                             authenticate with user, no user for prompt. create a
                             personal access token in your github settings instead

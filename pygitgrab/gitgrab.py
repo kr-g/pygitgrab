@@ -57,7 +57,7 @@ def getfolders( repourl, auth=None ):
     return all
     
 
-def download_file(url, dest, auth=None):
+def download_file(url, dest=None, auth=None):
     try:        
         headers = _getheaders(auth)
         
@@ -68,34 +68,22 @@ def download_file(url, dest, auth=None):
             
             data = r.content
             
-            with open( dest, "wb" ) as f:
-                f.write( data )
-                
-                return True
-    
-    except Exception as ex:
-        print("error: ", ex )
-    
-    return False
-
-
-def download_pygg(url, dest, auth=None):
-    try:        
-        headers = _getheaders(auth)
+            if dest != None:
+                with open( dest, "wb" ) as f:
+                    f.write( data )
+                    
+                    return True
+            else:
+                return data                
+            
         
-        with requests.get(url,auth=auth,headers=headers) as r:
-            
-            if r.status_code != 200:
-                raise Execption( "can not load data", url, r.headers )
-            
-            data = r.content
-            
-            return data
-    
     except Exception as ex:
         print("error: ", ex )
     
-    return None
+    return False if dest != None else None
+
+
+
 
 
 
